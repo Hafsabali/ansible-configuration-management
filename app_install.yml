@@ -1,0 +1,27 @@
+---
+- name: Installing nginx
+  hosts: all
+  vars:
+    app: nginx
+  become: yes
+  tasks:
+    - name: Installing nginx
+      apt:
+        name: "{{ app }}"
+        state: present
+        update_cache: yes
+      tags: i-nginx
+      notify: restart nginx
+    - name: Starting the nginx service
+      service:
+        name: "{{ app }}"
+        state: started
+        enabled: true
+      tags: ss-nginx
+  handlers:
+    - name: restart nginx
+      service:
+        name: "{{ app }}"
+        state: restarted
+
+
